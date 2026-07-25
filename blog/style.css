@@ -54,3 +54,48 @@ footer.site{
 }
 footer.site p{font-size:0.82rem;margin:6px 0}
 footer.site a{color:var(--muted)}
+
+/* Blog index: editorial two-column layout using this site's own palette. */
+header.site .wrap{max-width:1020px}
+.blog-layout.wrap{
+  max-width:1020px;margin-top:32px;padding:0 20px;background:transparent;border:0;
+  box-shadow:none;display:grid;grid-template-columns:minmax(0,1fr) 255px;gap:28px;align-items:start;
+}
+.feed{background:rgba(255,255,255,.94);border:1px solid var(--border);border-radius:24px;padding:clamp(25px,4vw,42px);box-shadow:var(--shadow)}
+.feed .eyebrow,.aside-label{margin:0 0 8px;color:var(--tag-fg);font-size:.71rem;font-weight:800;letter-spacing:.13em;line-height:1.3}
+.feed h1{font-size:clamp(1.8rem,4vw,2.55rem);margin-bottom:14px}
+.feed .postlist{margin-top:26px}
+.feed .postlist li{position:relative;margin:0;padding:20px 0;border:0;border-bottom:1px solid var(--border);border-radius:0;background:transparent}
+.feed .postlist li:first-child{border-top:1px solid var(--border)}
+.feed .postlist li:hover{transform:none;box-shadow:none}
+.feed .postlist li::before{content:"";position:absolute;left:-12px;top:25px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.feed .postlist a{font-size:1.12rem;line-height:1.55}
+.feed .postlist .d{font-size:.9rem;margin-top:7px}
+.blog-aside{display:grid;gap:14px}
+.aside-card{padding:19px;background:rgba(255,255,255,.82);border:1px solid var(--border);border-radius:18px;box-shadow:0 8px 20px rgba(174,90,128,.07)}
+.aside-card h2{font-size:1rem;line-height:1.55;margin:0 0 8px}
+.aside-card p:last-child{margin:0;color:var(--muted);font-size:.86rem;line-height:1.75}
+.aside-card a{display:block;padding:10px 0;border-top:1px solid var(--border);color:var(--fg);font-size:.88rem;font-weight:650;text-decoration:none;line-height:1.45}
+.aside-card a:hover{color:var(--accent)}
+
+@media (max-width:760px){
+  body{background:linear-gradient(145deg,#fff2f7 0,#fff8fb 36%,#f6f1ff 100%)}
+  header.site{padding:20px 0 17px}
+  header.site a.home{font-size:1.15rem}
+  .blog-layout.wrap{display:block;margin-top:16px;padding:0 14px}
+  .feed{border-radius:19px;padding:24px 20px}
+  .feed h1{font-size:1.75rem}
+  .feed .lead{font-size:.96rem}
+  .feed .postlist{margin-top:20px}
+  .feed .postlist li{padding:17px 0 17px 3px}
+  .feed .postlist a{font-size:1.02rem}
+  .feed .postlist li::before{left:-7px;top:23px}
+  .blog-aside{margin-top:16px;grid-template-columns:1fr 1fr;gap:10px}
+  .aside-card{padding:15px;border-radius:15px}
+  .aside-card h2{font-size:.93rem}
+  .aside-card p:last-child{font-size:.8rem}
+  .aside-card a{font-size:.82rem;padding:8px 0}
+  footer.site{margin-top:32px;padding:20px 14px 44px}
+}
+
+@media (max-width:430px){.blog-aside{grid-template-columns:1fr}}
