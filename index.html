@@ -179,6 +179,10 @@
   .modalname{font-size:19px;font-weight:750;margin:0 0 4px;}
   .modalsub{font-size:13.5px;color:var(--muted);margin:0 0 16px;}
   .modalapply{display:block;background:var(--action);color:#fff;text-decoration:none;font-weight:750;padding:14px;border-radius:12px;font-size:15px;box-shadow:0 6px 14px color-mix(in srgb,var(--action) 28%,transparent);}
+  .affiliate-offer{margin:18px 0 0;padding:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;text-align:center;}
+  .affiliate-offer.hide{display:none;}
+  .affiliate-offer .affiliate-label{margin:0 0 9px;color:var(--faint);font-size:11px;font-weight:750;letter-spacing:.06em;}
+  .affiliate-offer img{max-width:100%;height:auto;}
   .modalapply:hover{background:var(--action-strong);}
   .modalcsv{display:block;width:100%;margin-top:10px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-weight:650;padding:11px;border-radius:12px;cursor:pointer;font-size:13.5px;}
   .modalcsv:hover{border-color:color-mix(in srgb,var(--action) 40%,var(--line));}
@@ -350,8 +354,9 @@
       <p class="modalname" id="modalCardName">—</p>
       <p class="modalsub" id="modalCardSub"></p>
       <a class="modalapply" id="modalApply" href="#" target="_blank" rel="noopener noreferrer">公式サイトで申し込む</a>
+      <section class="affiliate-offer hide" id="affiliateOffer" aria-label="広告・PR"></section>
       <button class="modalcsv" id="modalCsv" type="button">📄 診断結果をCSVで保存</button>
-      <p class="modalnote">※還元はサンプル/要監修の概算です。券面は仮デザイン（提携後に差し替え）。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
+      <p class="modalnote">※還元はサンプル/要監修の概算です。券面は公式画像ではない仮デザインです。広告・PRは提携済みの案件だけを表示します。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
     </div>
   </div>
   <footer class="foot">この診断はブラウザ内で計算します。店名だけで判断できない条件付き還元やキャンペーン、対象外条件は、利用時点の公式情報をご確認ください。</footer>
@@ -377,6 +382,31 @@
     var n=(name||"").toString().toLowerCase();
     for(var i=0;i<KW.length;i++){var keys=KW[i][1];for(var j=0;j<keys.length;j++){var k=keys[j];if(k&&n.indexOf(k.toLowerCase())!==-1)return KW[i][0];}}
     return "その他";
+  }
+
+  // 提携承認済みかつ、広告枠での掲載が許可された案件だけを追加する。
+  // 券面画像の台帳とは分離し、診断UIの券面には使わない。
+  var AFFILIATE_OFFERS={
+    epos_card:{id:"epos_card",programId:"s00000015110002",provider:"a8",site:"1734",article:"658",link:"2971",image:"3218",a8mat:"4B89KV+BGLFRU+38L8+BXQOH"}
+  };
+
+  function renderAffiliateOffer(card){
+    var slot=document.getElementById("affiliateOffer"),offer=card&&AFFILIATE_OFFERS[card.id];
+    if(!offer){slot.classList.add("hide");slot.innerHTML="";delete slot.dataset.offerId;return;}
+    slot.classList.remove("hide");
+    if(slot.dataset.offerId===offer.id)return;
+    slot.dataset.offerId=offer.id;
+    slot.innerHTML='<p class="affiliate-label">広告・PR</p><div id="div_admane_async_1734_658_2971"></div><img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat='+esc(offer.a8mat)+'" alt="">';
+    var mount=function(){
+      if(typeof window.brandsafe_js_async!=="function")return;
+      window.brandsafe_js_async("//ad-verification.a8.net/ad","_site="+offer.site+"&_article="+offer.article+"&_link="+offer.link+"&_image="+offer.image+"&_ns=1&sad="+offer.programId,"260726143693",offer.a8mat);
+    };
+    if(typeof window.brandsafe_js_async==="function"){mount();return;}
+    var script=document.createElement("script");
+    script.src="https://ad-verification.a8.net/ad/js/brandsafe.js";
+    script.async=true;
+    script.onload=mount;
+    document.head.appendChild(script);
   }
 
   var REWARDS={
@@ -911,6 +941,7 @@
       document.getElementById("modalCardFace").innerHTML='<span class="cf-chip"></span><span class="cf-name">'+esc(bc0.name)+'</span>';
       document.getElementById("modalApply").href=bc0.source||"#";
     }
+    renderAffiliateOffer(bc0);
     var res=document.getElementById("results");
     if(!res.classList.contains("show")){res.classList.add("show");res.scrollIntoView({behavior:"smooth",block:"start"});}
   }
