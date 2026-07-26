@@ -386,9 +386,10 @@
 
   // 提携承認済みかつ、広告枠での掲載が許可された案件だけを追加する。
   // 券面画像の台帳とは分離し、診断UIの券面には使わない。
-  var AFFILIATE_OFFERS={
-    epos_card:{id:"epos_card",programId:"s00000015110002",provider:"a8",site:"1734",article:"658",link:"2971",image:"3218",a8mat:"4B89KV+BGLFRU+38L8+BXQOH"}
-  };
+  // Epos offer data is intentionally not enabled until this result page URL is
+  // registered in A8's advertising-URL manager. Add approved offers here only
+  // after both the partnership and its specific placement URL are confirmed.
+  var AFFILIATE_OFFERS={};
 
   function renderAffiliateOffer(card){
     var slot=document.getElementById("affiliateOffer"),offer=card&&AFFILIATE_OFFERS[card.id];
