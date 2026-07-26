@@ -386,11 +386,9 @@
 
   // 提携承認済みかつ、広告枠での掲載が許可された案件だけを追加する。
   // 券面画像の台帳とは分離し、診断UIの券面には使わない。
-  // Add entries only after the program partnership and this exact placement URL
-  // have both been approved/registered with the applicable advertising network.
-  var AFFILIATE_OFFERS={
-    epos_card:{id:"epos_card",programId:"s00000015110002",provider:"a8",site:"1734",article:"658",link:"2971",image:"3218",a8mat:"4B89KV+BGLFRU+38L8+BXQOH"}
-  };
+  // A GitHub Pages hostname migration is in progress. Keep this empty until
+  // the new exact placement URL has been registered with the ad network.
+  var AFFILIATE_OFFERS={};
 
   function renderAffiliateOffer(card){
     var slot=document.getElementById("affiliateOffer"),offer=card&&AFFILIATE_OFFERS[card.id];
