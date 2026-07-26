@@ -48,6 +48,10 @@ a:focus-visible{outline:2px solid var(--lavender);outline-offset:3px;border-radi
 .postlist a:hover{color:var(--accent)}
 .postlist .d{color:var(--muted);font-size:.91rem;margin-top:5px;line-height:1.75}
 
+.ad-slot{margin:26px 0;padding:18px;background:var(--surface-soft);border:1px solid var(--border);border-radius:16px;text-align:center}
+.ad-slot p{margin:0 0 12px;color:var(--muted);font-size:.82rem}
+.ad-slot img{max-width:100%;height:auto}
+
 footer.site{
   margin-top:48px;padding:24px 0 60px;border-top:1px solid var(--border);
   color:var(--muted);font-size:.82rem;
