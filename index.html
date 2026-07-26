@@ -155,7 +155,14 @@
   .mcat-total{font-weight:700;color:var(--ink);text-align:right;}
   .msubgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px 12px;margin-top:9px;padding-left:6px;}
   .disclaimer{font-size:12px;color:var(--muted);line-height:1.7;} .disclaimer strong{color:var(--ink);} .disclaimer ul{margin:8px 0 0;padding-left:18px;} .disclaimer li{margin-bottom:5px;}
-  .samplebanner{background:var(--gold-soft);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:14px;padding:11px 14px;font-size:12.5px;font-weight:600;margin-bottom:18px;line-height:1.5;}
+  .method-note{display:flex;gap:10px;align-items:flex-start;background:var(--gold-soft);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:14px;padding:12px 14px;font-size:12.5px;margin-bottom:18px;line-height:1.6;}
+  .method-note .method-mark{display:grid;place-items:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--gold);font-weight:800;font-size:13px;}
+  .method-note strong{color:var(--ink);}
+  .source-details{margin-top:15px;border-top:1px solid var(--line);padding-top:12px;}
+  .source-details summary{cursor:pointer;color:var(--action);font-weight:650;list-style:none;}
+  .source-details summary::-webkit-details-marker{display:none;}
+  .source-details summary::before{content:"＋ ";}
+  .source-details[open] summary::before{content:"− ";}
   .normal-rule{background:#fff9fc;border:1px dashed color-mix(in srgb,var(--brand) 45%,var(--line));border-radius:14px;color:var(--muted);font-size:12.5px;line-height:1.65;margin:12px 0 0;padding:10px 12px;}
   .normal-rule strong{color:var(--ink);}
   .source-links{font-size:12px;line-height:1.8;padding-left:18px;margin:8px 0 0;}
@@ -257,7 +264,7 @@
 
   <div class="results" id="results">
 
-    <div class="samplebanner">公式情報を2026-07-23に確認した<strong>通常還元・年会費の比較</strong>です。クレジットカードと即時引落のデビットカードを切替できます。店名が確認済みの特約店ルールに一致した分は自動で上乗せを反映しますが、決済方法・時間帯・事前エントリーなどさらに条件が必要な上位の還元（無印良品の他スマホ決済、ミニストップのAEON Pay 5%・10%、ローソンの時間帯・エントリー特典など）は店名だけでは判定できないため含めません。マイルは選択した円換算価値で比較し、未利用年のカードサービス手数料など確認済みの費用条件も表示します。キャンペーン、搭乗・航空券ボーナス、対象外取引はCSVだけで確定できないため、自動加算していません。</div>
+    <div class="method-note" role="note"><span class="method-mark" aria-hidden="true">i</span><div><strong>比較は、確認できる通常還元と年会費をもとにした目安です。</strong><br>店名だけで判定できないキャンペーン・決済方法・時間帯などの条件付き還元は、計算に含めていません。申込み前には必ず公式情報をご確認ください。</div></div>
 
     <section class="card hero">
       <p class="lbl" id="heroLbl">最適な選択</p>
@@ -316,7 +323,8 @@
           <li><strong>期間限定キャンペーンは対象外。</strong> 楽天市場の5と0の日・お買い物マラソン、各カードの入会/継続キャンペーンなどは、エントリー・対象外・上限・開催期間をこの診断だけで判定できないため計算に含めません。下記の公式情報と利用時点の規約を確認してください。</li>
           <li><strong>ガソリンの円/L引きは参考価格による概算。</strong> 出光/シェルSSの2円/L引き（apollostation card）は、詳細設定の「参考：レギュラー1Lの価格」（初期値¥169・全国平均）で割った概算%として表示します。実際の給油時単価によって実際の割引率は変わります。コスモ石油の「会員価格」は具体的な円/L額が公表されていないため計算していません。</li>
         </ul>
-        <p><strong>v22で参照した公式情報（2026-07-23確認・v22追加5枚とv24のJAL/ANA航空券購入マイルは2026-07-24確認）</strong></p>
+        <details class="source-details"><summary>参照した公式情報・確認日を表示</summary>
+        <p>通常還元・年会費などは<strong>2026年7月23日〜24日</strong>に確認しました。条件は変更されるため、申込み前に各社の公式ページをご確認ください。</p>
         <ul class="source-links">
           <li><a href="https://www.jcb.co.jp/promotion/ordercard/free_ws/index.html" target="_blank" rel="noopener noreferrer">JCB カード W</a>・<a href="https://recruit-card.jp/basic-card/" target="_blank" rel="noopener noreferrer">リクルートカード</a>・<a href="https://www.rakuten-card.co.jp/point/" target="_blank" rel="noopener noreferrer">楽天カード</a>・<a href="https://dcard.docomo.ne.jp/st/dpoint_points/shopping/index.html" target="_blank" rel="noopener noreferrer">dカード</a></li>
           <li><a href="https://www.orico.co.jp/creditcard/list/thepoint/" target="_blank" rel="noopener noreferrer">Orico Card THE POINT</a>・<a href="https://qa.kddi-fs.com/faq/show/357?category_id=56&amp;site_domain=1" target="_blank" rel="noopener noreferrer">au PAY カード</a>・<a href="https://www.smbc-card.com/nyukai/card/numberless.jsp" target="_blank" rel="noopener noreferrer">三井住友カード（NL）</a>・<a href="https://www.eposcard.co.jp/smp/aflt/index2.html" target="_blank" rel="noopener noreferrer">エポスカード</a></li>
@@ -329,6 +337,7 @@
           <li><a href="https://www.aeon.co.jp/point/save/anytime/" target="_blank" rel="noopener noreferrer">イオングループ基本2倍</a>・<a href="https://www.ministop.co.jp/campaign/2504aeonpay-cp.html" target="_blank" rel="noopener noreferrer">ミニストップ AEON Pay（金・土・日）</a></li>
           <li><a href="https://www.paypay-card.co.jp/service/benefit/point/" target="_blank" rel="noopener noreferrer">PayPayカード</a>・<a href="https://www.rakuten-card.co.jp/card/rakuten-card-academy/" target="_blank" rel="noopener noreferrer">楽天カード アカデミー</a></li>
         </ul>
+        </details>
       </div>
     </section>
 
@@ -345,7 +354,7 @@
       <p class="modalnote">※還元はサンプル/要監修の概算です。券面は仮デザイン（提携後に差し替え）。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
     </div>
   </div>
-  <footer class="foot">クライアントサイド v24・実カードの通常還元比較／店名一致の特約店ルールは自動適用・時間帯やエントリーが必要な上位の還元とキャンペーン・対象外条件は利用時点で要確認。</footer>
+  <footer class="foot">この診断はブラウザ内で計算します。店名だけで判断できない条件付き還元やキャンペーン、対象外条件は、利用時点の公式情報をご確認ください。</footer>
 
 </div></div>
 
