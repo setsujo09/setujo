@@ -180,7 +180,7 @@
   .modalsub{font-size:13.5px;color:var(--muted);margin:0 0 16px;}
   .modalapply{display:block;background:var(--action);color:#fff;text-decoration:none;font-weight:750;padding:14px;border-radius:12px;font-size:15px;box-shadow:0 6px 14px color-mix(in srgb,var(--action) 28%,transparent);}
   .affiliate-offer{margin:18px 0 0;padding:14px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;text-align:center;}
-  .affiliate-offer.hide{display:none;}
+  .affiliate-offer.hide,.affiliate-unit.hide{display:none;}
   .affiliate-offer .affiliate-label{margin:0 0 9px;color:var(--faint);font-size:11px;font-weight:750;letter-spacing:.06em;}
   .affiliate-offer img{max-width:100%;height:auto;}
   .modalapply:hover{background:var(--action-strong);}
@@ -354,7 +354,22 @@
       <p class="modalname" id="modalCardName">—</p>
       <p class="modalsub" id="modalCardSub"></p>
       <a class="modalapply" id="modalApply" href="#" target="_blank" rel="noopener noreferrer">公式サイトで申し込む</a>
-      <section class="affiliate-offer hide" id="affiliateOffer" aria-label="広告・PR"></section>
+      <section class="affiliate-offer hide" id="affiliateOffer" aria-label="広告・PR">
+        <!-- A8.netから提供された広告タグを改変せずそのまま掲載する。JSは表示/非表示の
+             切り替えだけを行い、タグの組み立て・書き換えはしない。案件を追加するときは
+             その案件の配布タグを data-offer-id 付きのブロックとしてここへ丸ごと貼る。 -->
+        <div class="affiliate-unit" data-offer-id="epos_card">
+          <p class="affiliate-label">広告・PR</p>
+<script type='text/javascript' src='https://ad-verification.a8.net/ad/js/brandsafe.js'></script>
+<div id='div_admane_async_1734_658_2971'>
+<script type='text/javascript'>
+<!--
+brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link=2971&_image=3218&_ns=1&sad=s00000015110002', '260726143693', '4B89KV+BGLFRU+38L8+BXQOH');
+//-->
+</script>
+</div><img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat=4B89KV+BGLFRU+38L8+BXQOH" alt="">
+        </div>
+      </section>
       <button class="modalcsv" id="modalCsv" type="button">📄 診断結果をCSVで保存</button>
       <p class="modalnote">※還元はサンプル/要監修の概算です。券面は公式画像ではない仮デザインです。広告・PRは提携済みの案件だけを表示します。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
     </div>
@@ -384,31 +399,20 @@
     return "その他";
   }
 
-  // 提携承認済みかつ、広告枠での掲載が許可された案件だけを追加する。
-  // 券面画像の台帳とは分離し、診断UIの券面には使わない。
-  // Add entries only after the program partnership and this exact placement URL
-  // have both been approved/registered with the applicable advertising network.
-  var AFFILIATE_OFFERS={
-    epos_card:{id:"epos_card",programId:"s00000015110002",provider:"a8",site:"1734",article:"658",link:"2971",image:"3218",a8mat:"4B89KV+BGLFRU+38L8+BXQOH"}
-  };
-
+  // 広告枠は、提携承認済みかつこの掲載URLを広告主へ登録済みの案件だけを出す。
+  // 配布された広告タグはHTML側に逐語で置いてあり、ここでは表示する案件の判定と
+  // 表示/非表示の切り替えだけを行う（タグを組み立て直すと提供素材の改変になるため）。
+  // 券面画像の台帳とは別経路で、診断UIの券面には使わない。
   function renderAffiliateOffer(card){
-    var slot=document.getElementById("affiliateOffer"),offer=card&&AFFILIATE_OFFERS[card.id];
-    if(!offer){slot.classList.add("hide");slot.innerHTML="";delete slot.dataset.offerId;return;}
-    slot.classList.remove("hide");
-    if(slot.dataset.offerId===offer.id)return;
-    slot.dataset.offerId=offer.id;
-    slot.innerHTML='<p class="affiliate-label">広告・PR</p><div id="div_admane_async_1734_658_2971"></div><img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat='+esc(offer.a8mat)+'" alt="">';
-    var mount=function(){
-      if(typeof window.brandsafe_js_async!=="function")return;
-      window.brandsafe_js_async("//ad-verification.a8.net/ad","_site="+offer.site+"&_article="+offer.article+"&_link="+offer.link+"&_image="+offer.image+"&_ns=1&sad="+offer.programId,"260726143693",offer.a8mat);
-    };
-    if(typeof window.brandsafe_js_async==="function"){mount();return;}
-    var script=document.createElement("script");
-    script.src="https://ad-verification.a8.net/ad/js/brandsafe.js";
-    script.async=true;
-    script.onload=mount;
-    document.head.appendChild(script);
+    var slot=document.getElementById("affiliateOffer"),
+        units=slot.querySelectorAll(".affiliate-unit"),
+        shown=false;
+    for(var i=0;i<units.length;i++){
+      var match=!!card&&units[i].dataset.offerId===card.id;
+      units[i].classList.toggle("hide",!match);
+      shown=shown||match;
+    }
+    slot.classList.toggle("hide",!shown);
   }
 
   var REWARDS={
