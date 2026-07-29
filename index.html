@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>あなたに最適の一枚は？ ｜ クレカ還元診断</title>
+<title>クレカ見直し診断 ｜ 支出からカード比較</title>
 </head>
 <body>
 <style>
@@ -121,6 +121,7 @@
   .track{height:12px;background:var(--bar-track);border-radius:6px;overflow:hidden;} .fill{height:100%;border-radius:6px;background:var(--brand);}
   .barrow.best .fill{background:var(--gold);}
   .barrow .amt{font-size:13.5px;font-weight:700;text-align:right;min-width:84px;}
+  @media (max-width:320px){.barrow{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name amount" "track track";gap:6px 8px;}.barrow .nm{grid-area:name;min-width:0;}.barrow .track{grid-area:track;min-width:0;}.barrow .amt{grid-area:amount;min-width:0;}}
   .pill{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:999px;background:var(--gold-soft);color:var(--gold);margin-left:6px;vertical-align:middle;}
 
   details.ruleset{margin-top:4px;} details.ruleset summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);padding:4px 0;} details.ruleset summary:hover{color:var(--ink);}
@@ -155,23 +156,19 @@
   .mcat-total{font-weight:700;color:var(--ink);text-align:right;}
   .msubgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px 12px;margin-top:9px;padding-left:6px;}
   .disclaimer{font-size:12px;color:var(--muted);line-height:1.7;} .disclaimer strong{color:var(--ink);} .disclaimer ul{margin:8px 0 0;padding-left:18px;} .disclaimer li{margin-bottom:5px;}
-  .method-note{display:flex;gap:10px;align-items:flex-start;background:var(--gold-soft);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:14px;padding:12px 14px;font-size:12.5px;margin-bottom:18px;line-height:1.6;}
-  .method-note .method-mark{display:grid;place-items:center;flex:0 0 22px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--gold);font-weight:800;font-size:13px;}
-  .method-note strong{color:var(--ink);}
-  .source-details{margin-top:15px;border-top:1px solid var(--line);padding-top:12px;}
-  .source-details summary{cursor:pointer;color:var(--action);font-weight:650;list-style:none;}
-  .source-details summary::-webkit-details-marker{display:none;}
-  .source-details summary::before{content:"＋ ";}
-  .source-details[open] summary::before{content:"− ";}
+  .samplebanner{background:var(--gold-soft);color:var(--gold);border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:14px;padding:11px 14px;font-size:12.5px;font-weight:600;margin-bottom:18px;line-height:1.5;}
   .normal-rule{background:#fff9fc;border:1px dashed color-mix(in srgb,var(--brand) 45%,var(--line));border-radius:14px;color:var(--muted);font-size:12.5px;line-height:1.65;margin:12px 0 0;padding:10px 12px;}
   .normal-rule strong{color:var(--ink);}
   .source-links{font-size:12px;line-height:1.8;padding-left:18px;margin:8px 0 0;}
   .source-links a{color:var(--brand);}
   footer.foot{text-align:center;font-size:11.5px;color:var(--faint);margin-top:26px;}
-  .modal{position:fixed;inset:0;background:rgba(74,53,66,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal{position:fixed;inset:0;background:rgba(74,53,66,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;overflow:auto;}
   .modal.hide{display:none;}
-  .modalbox{background:var(--surface);border-radius:20px;padding:26px 22px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.32);position:relative;animation:rise .3s ease both;}
-  .modalclose{position:absolute;top:8px;right:12px;background:transparent;border:0;font-size:24px;line-height:1;color:var(--faint);cursor:pointer;padding:4px 8px;}
+  /* 縦の短い画面（スマホ横向き・折りたたみのカバー画面）でモーダルが画面に収まらないと、
+     閉じるボタンが画面外へ出て操作不能になる。中身をモーダル内でスクロールさせ、
+     閉じるボタンはstickyで常に見える位置に置く。 */
+  .modalbox{background:var(--surface);border-radius:20px;padding:26px 22px 22px;max-width:360px;width:100%;max-height:calc(100vh - 40px);overflow-y:auto;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.32);position:relative;animation:rise .3s ease both;}
+  .modalclose{position:sticky;top:0;z-index:2;display:block;margin:-18px -8px -24px auto;background:var(--surface);border:0;border-radius:999px;font-size:24px;line-height:1;color:var(--faint);cursor:pointer;padding:4px 8px;}
   .modaltag{font-size:12px;color:var(--brand);font-weight:700;letter-spacing:.05em;margin:0 0 12px;}
   .cardface{height:132px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--action));color:#fff;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;padding:14px 16px;margin:0 auto 14px;box-shadow:0 8px 20px rgba(0,0,0,.2);text-align:left;}
   .cardface .cf-chip{width:34px;height:24px;border-radius:5px;background:rgba(255,255,255,.75);}
@@ -186,13 +183,17 @@
   .modalapply:hover{background:var(--action-strong);}
   .modalcsv{display:block;width:100%;margin-top:10px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);font-weight:650;padding:11px;border-radius:12px;cursor:pointer;font-size:13.5px;}
   .modalcsv:hover{border-color:color-mix(in srgb,var(--action) 40%,var(--line));}
+  .ratestatus{display:inline-block;margin:8px 0 0;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:750;background:var(--brand-soft);color:var(--brand-strong);}
+  .ratestatus.hide{display:none;}
+  .ratereason{font-size:11px;color:var(--muted);margin:6px 0 0;line-height:1.5;}
+  .ratereason.hide{display:none;}
   .modalnote{font-size:10.5px;color:var(--faint);margin:12px 0 0;line-height:1.55;}
 </style>
 
 <div class="wrap"><div class="shell">
 
   <header class="top">
-    <p class="eyebrow">クレカ1枚えらび診断</p>
+    <p class="eyebrow">クレカ見直し診断</p>
     <h1>あなたに最適の一枚は？</h1>
     <p class="lede">ふだんの支出を入れるだけで、<strong>あなたにいちばん得なクレジットカード1枚</strong>を診断します。実在カードの通常還元で比較し、店名が確認済みの特約店ルールに一致した分は<strong>自動で上乗せを反映</strong>（サンプル要監修）。使い分けたい人は「複数枚」も選べます。</p>
     <span class="privacy"><span class="dot"></span>データはこのブラウザ内だけで処理されます（外部送信なし）</span>
@@ -268,7 +269,7 @@
 
   <div class="results" id="results">
 
-    <div class="method-note" role="note"><span class="method-mark" aria-hidden="true">i</span><div><strong>比較は、確認できる通常還元と年会費をもとにした目安です。</strong><br>店名だけで判定できないキャンペーン・決済方法・時間帯などの条件付き還元は、計算に含めていません。申込み前には必ず公式情報をご確認ください。</div></div>
+    <div class="samplebanner">公式情報を2026-07-23に確認した<strong>通常還元・年会費の比較</strong>です。クレジットカードと即時引落のデビットカードを切替できます。店名が確認済みの特約店ルールに一致した分は自動で上乗せを反映しますが、決済方法・時間帯・事前エントリーなどさらに条件が必要な上位の還元（無印良品の他スマホ決済、ミニストップのAEON Pay 5%・10%、ローソンの時間帯・エントリー特典など）は店名だけでは判定できないため含めません。マイルは選択した円換算価値で比較し、未利用年のカードサービス手数料など確認済みの費用条件も表示します。キャンペーン、搭乗・航空券ボーナス、対象外取引はCSVだけで確定できないため、自動加算していません。</div>
 
     <section class="card hero">
       <p class="lbl" id="heroLbl">最適な選択</p>
@@ -327,8 +328,7 @@
           <li><strong>期間限定キャンペーンは対象外。</strong> 楽天市場の5と0の日・お買い物マラソン、各カードの入会/継続キャンペーンなどは、エントリー・対象外・上限・開催期間をこの診断だけで判定できないため計算に含めません。下記の公式情報と利用時点の規約を確認してください。</li>
           <li><strong>ガソリンの円/L引きは参考価格による概算。</strong> 出光/シェルSSの2円/L引き（apollostation card）は、詳細設定の「参考：レギュラー1Lの価格」（初期値¥169・全国平均）で割った概算%として表示します。実際の給油時単価によって実際の割引率は変わります。コスモ石油の「会員価格」は具体的な円/L額が公表されていないため計算していません。</li>
         </ul>
-        <details class="source-details"><summary>参照した公式情報・確認日を表示</summary>
-        <p>通常還元・年会費などは<strong>2026年7月23日〜24日</strong>に確認しました。条件は変更されるため、申込み前に各社の公式ページをご確認ください。</p>
+        <p><strong>v22で参照した公式情報（2026-07-23確認・v22追加5枚とv24のJAL/ANA航空券購入マイルは2026-07-24確認）</strong></p>
         <ul class="source-links">
           <li><a href="https://www.jcb.co.jp/promotion/ordercard/free_ws/index.html" target="_blank" rel="noopener noreferrer">JCB カード W</a>・<a href="https://recruit-card.jp/basic-card/" target="_blank" rel="noopener noreferrer">リクルートカード</a>・<a href="https://www.rakuten-card.co.jp/point/" target="_blank" rel="noopener noreferrer">楽天カード</a>・<a href="https://dcard.docomo.ne.jp/st/dpoint_points/shopping/index.html" target="_blank" rel="noopener noreferrer">dカード</a></li>
           <li><a href="https://www.orico.co.jp/creditcard/list/thepoint/" target="_blank" rel="noopener noreferrer">Orico Card THE POINT</a>・<a href="https://qa.kddi-fs.com/faq/show/357?category_id=56&amp;site_domain=1" target="_blank" rel="noopener noreferrer">au PAY カード</a>・<a href="https://www.smbc-card.com/nyukai/card/numberless.jsp" target="_blank" rel="noopener noreferrer">三井住友カード（NL）</a>・<a href="https://www.eposcard.co.jp/smp/aflt/index2.html" target="_blank" rel="noopener noreferrer">エポスカード</a></li>
@@ -341,7 +341,6 @@
           <li><a href="https://www.aeon.co.jp/point/save/anytime/" target="_blank" rel="noopener noreferrer">イオングループ基本2倍</a>・<a href="https://www.ministop.co.jp/campaign/2504aeonpay-cp.html" target="_blank" rel="noopener noreferrer">ミニストップ AEON Pay（金・土・日）</a></li>
           <li><a href="https://www.paypay-card.co.jp/service/benefit/point/" target="_blank" rel="noopener noreferrer">PayPayカード</a>・<a href="https://www.rakuten-card.co.jp/card/rakuten-card-academy/" target="_blank" rel="noopener noreferrer">楽天カード アカデミー</a></li>
         </ul>
-        </details>
       </div>
     </section>
 
@@ -371,10 +370,12 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
         </div>
       </section>
       <button class="modalcsv" id="modalCsv" type="button">📄 診断結果をCSVで保存</button>
-      <p class="modalnote">※還元はサンプル/要監修の概算です。券面は公式画像ではない仮デザインです。広告・PRは提携済みの案件だけを表示します。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
+      <p class="ratestatus hide" id="rateStatus"></p>
+      <p class="ratereason hide" id="rateReason"></p>
+      <p class="modalnote">※還元はサンプル/要監修の概算です。券面は仮デザインです。広告・PRは提携済みの案件だけを表示します。お申し込み前に各カード公式ページで最新の年会費・還元・条件をご確認ください。</p>
     </div>
   </div>
-  <footer class="foot">この診断はブラウザ内で計算します。店名だけで判断できない条件付き還元やキャンペーン、対象外条件は、利用時点の公式情報をご確認ください。</footer>
+  <footer class="foot">クライアントサイド v24・実カードの通常還元比較／店名一致の特約店ルールは自動適用・時間帯やエントリーが必要な上位の還元とキャンペーン・対象外条件は利用時点で要確認。</footer>
 
 </div></div>
 
@@ -389,30 +390,28 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     ["外食",["スタバ","スターバックス","マクドナルド","マック","ドトール","居酒屋","レストラン","食堂","カフェ","すき家","吉野家","ラーメン","サイゼ","ガスト","松屋","モス","ケンタッキー","kfc","タリーズ","スシロー","くら寿司","はま寿司","バーミヤン","ジョナサン","丸亀","幸楽苑","ミスド","ミスタードーナツ","マック","飲食店","交際費"]],
     ["ネット通販",["amazon","アマゾン","楽天市場","楽天","ヨドバシ.com","ヨドバシ","ビックカメラ","biccamera","メルカリ","zozo","ネット通販","qoo10","yahoo!ショッピング","yahoo","ヤフー","ヤフオク","ラクマ","aliexpress","アリエク","shein","シーイン","ユニクロ","uniqlo","ジーユー"]],
     ["交通",["jr","メトロ","私鉄","suica","pasmo","icoca","タクシー","バス","航空","ana","jal","新幹線","交通","電車","タッチ決済乗車","東急","小田急","京王","京急","西武","東武","相鉄","南海","名鉄","近鉄","阪急","阪神","つくば"]],
-    ["携帯・通信",["ドコモ","docomo","au","ソフトバンク","softbank","楽天モバイル","povo","ahamo","uq","携帯","通信","光回線","nuro"]],
+    ["携帯・通信",["ドコモ","docomo","au","ソフトバンク","softbank","povo","ahamo","irumo","uq","ワイモバイル","y!mobile","ymobile","linemo","mineo","iijmio","携帯","通信","光回線","nuro"]],
     ["公共料金",["電力","電気","ガス","水道","公共","でんき"]],
     ["ガソリン",["eneos","エネオス","出光","コスモ","昭和シェル","ガソリン","apollostation"]]
   ];
+  // ブランド名（楽天・イオン・au・ソフトバンク・ドコモ）は通販/スーパー/通信/公共料金に
+  // またがるため、KWの「先に並んだカテゴリが勝つ」方式では業態を取り違える。
+  // 業態まで判別できるサービス名だけ、KWより先に固定する。
+  // 例: 「楽天モバイル」を通販扱いにすると、通信料金を除外する特典（QuicPay等）を誤適用する。
+  var CAT_FIXED=[
+    ["楽天モバイル","携帯・通信"],["楽天ひかり","携帯・通信"],["楽天ブロードバンド","携帯・通信"],
+    ["楽天でんき","公共料金"],["楽天エナジー","公共料金"],["楽天ガス","公共料金"],
+    ["イオンモバイル","携帯・通信"],["イオンでんき","公共料金"],["イオン電気","公共料金"],
+    ["auでんき","公共料金"],["au でんき","公共料金"],
+    ["ソフトバンクでんき","公共料金"],["ソフトバンク でんき","公共料金"],
+    ["ドコモでんき","公共料金"],["ドコモ でんき","公共料金"],
+    ["au pay マーケット","ネット通販"],["au payマーケット","ネット通販"],["aupayマーケット","ネット通販"]
+  ];
   function categorize(name){
     var n=(name||"").toString().toLowerCase();
+    for(var f=0;f<CAT_FIXED.length;f++)if(n.indexOf(CAT_FIXED[f][0])!==-1)return CAT_FIXED[f][1];
     for(var i=0;i<KW.length;i++){var keys=KW[i][1];for(var j=0;j<keys.length;j++){var k=keys[j];if(k&&n.indexOf(k.toLowerCase())!==-1)return KW[i][0];}}
     return "その他";
-  }
-
-  // 広告枠は、提携承認済みかつこの掲載URLを広告主へ登録済みの案件だけを出す。
-  // 配布された広告タグはHTML側に逐語で置いてあり、ここでは表示する案件の判定と
-  // 表示/非表示の切り替えだけを行う（タグを組み立て直すと提供素材の改変になるため）。
-  // 券面画像の台帳とは別経路で、診断UIの券面には使わない。
-  function renderAffiliateOffer(card){
-    var slot=document.getElementById("affiliateOffer"),
-        units=slot.querySelectorAll(".affiliate-unit"),
-        shown=false;
-    for(var i=0;i<units.length;i++){
-      var match=!!card&&units[i].dataset.offerId===card.id;
-      units[i].classList.toggle("hide",!match);
-      shown=shown||match;
-    }
-    slot.classList.toggle("hide",!shown);
   }
 
   var REWARDS={
@@ -457,7 +456,37 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
   function fuelPriceYen(){var el=document.getElementById("fuelPrice"),v=el?parseFloat(el.value):169;return isFinite(v)&&v>0?v:169;}
   function rewardNote(reward){var r=REWARDS[reward];return r&&r.mile?"1マイル="+yen(mileYen())+"で円換算":(r?r.note:"");}
 
-  // rates: CSVカテゴリだけで判定できる確認済みの例外。merchants は店名だけで適用できる通常特典に限る。決済手段・曜日が必要なミニストップAEON Pay特典は明示選択時のみ上書きする。
+  // 広告枠は、提携承認済みかつこの掲載URLを広告主へ登録済みの案件だけを出す。
+  // 配布された広告タグはHTML側に逐語で置いてあり、ここでは表示する案件の判定と
+  // 表示/非表示の切り替えだけを行う（タグを組み立て直すと提供素材の改変になるため）。
+  // 券面画像の台帳とは別経路で、診断UIの券面には使わない。
+  function renderAffiliateOffer(card){
+    var slot=document.getElementById("affiliateOffer"),
+        units=slot.querySelectorAll(".affiliate-unit"),
+        shown=false;
+    for(var i=0;i<units.length;i++){
+      var match=!!card&&units[i].dataset.offerId===card.id;
+      units[i].classList.toggle("hide",!match);
+      shown=shown||match;
+    }
+    slot.classList.toggle("hide",!shown);
+  }
+
+  // rates: CSVカテゴリだけで判定できる確認済みの例外。特約店の最低ラインはTOKUTENで店名一致により自動適用する。決済手段・曜日が必要な上位特典は計算しない。
+  var RATE_STATUS={"muji_card_visa":{"level":"conditional","reason":"CSVの店名だけではMUJI Card払い、MUJI passport Pay、他のスマートフォン決済を判定できないため、決済方法とMUJI GOOD PROGRAMポイント対象を確認した場合だけUIで選択する。"},"jcb_card_w":{"level":"conditional","reason":"掲載倍率・対象店舗・対象決済手段は変更される。最終還元率はカード固有の倍率と優待店ルールの合成が必要で、店名CSVだけでは確定できない。"},"amazon_mastercard":{"level":"conditional","reason":"Prime会員/非会員でAmazon.co.jp還元率が2%/1.5%に分かれ、CSV/手入力からは会員種別を判定できないため安全側の1.5%を採用。"},"jal_card_regular_smp":{"level":"conditional","reason":"特約店の対象範囲・決済手段条件をCSV/手入力の店名だけでは完全に確定できないため。"},"ana_jcb_general_10mile":{"level":"conditional","reason":"購入チャネルと決済手段をCSV/手入力の店名だけでは確定できないため。"},"jal_card_navi":{"level":"conditional","reason":"特約店の対象範囲・決済手段条件をCSV/手入力の店名だけでは完全に確定できないため。"},"rakuten_card":{"level":"conditional","reason":"カード特典以外のSPU・期間限定キャンペーンを合算しないため、CSVからの自動確定はしない。"},"olive_flexible_pay_credit":{"level":"conditional","reason":"CSVの店名・支払手段だけでは要件充足を判定できない。ユーザーが支払手段を明示した明細だけに適用可能。"},"mufg_card":{"level":"conditional","reason":"7%は基本0.5%とスペシャル6.5%を含む。カードブランドと加盟店判定が必要。"},"view_card_suica":{"level":"conditional","reason":"CSV上でチャージ、交通乗車、JR駅利用を区別できない場合があるため。"},"d_card":{"level":"unsupported","reason":"特約店の個別率・条件を一次情報で店舗単位に収集するまで自動計算しない。"},"paypay_card":{"level":"conditional","reason":"2026-06-02以降、アプリ登録・本人確認等の条件と例外取引がある。"},"aeon_card_waon":{"level":"conditional","reason":"CSVだけではイオンマークのカード払い・電子マネーWAON・対象外商品の判定ができないため、全該当明細が一致すると確認した場合だけUIで選択する。"},"sony_bank_wallet":{"level":"unsupported","reason":"口座残高・外貨預金残高等から決まるClub SステージはCSVだけで確定できない。"},"gmo_aozora_visa_debit":{"level":"unsupported","reason":"カスタマーステージは口座の利用状況で決まり、CSVだけでは確定できない。"},"jal_suica_club_a_gold":{"level":"conditional","reason":"内訳（2%+8%）は二次情報に基づく。公式ページ直接確認は取得できなかったが、複数の二次情報がゴールド10%で一致。"},"cosmo_opus":{"level":"unsupported","reason":"円/Lの値引きはポイント%に換算できないため計上しない"},"apollostation_card":{"level":"unsupported","reason":"円/Lの値引きはポイント%に換算できないため計上しない"},"ana_tome_pasmo":{"level":"conditional","reason":"購入チャネルと決済手段をCSV/手入力の店名だけでは確定できないため。"},"epos_gold":{"level":"unsupported","reason":"ユーザーが指定する3店舗に依存し自動判定できない"},"jal_suica_regular":{"level":"conditional","reason":"二次情報間で普通カードのえきねっと還元率が5%と10%で分かれており（ゴールドは10%で複数ソース一致、普通は5%とする情報が優勢）、公式ページ直接確認ができなかったため安全側の5%を採用。"},"ana_jcb_wide_gold":{"level":"conditional","reason":"購入チャネルと決済手段をCSV/手入力の店名だけでは確定できないため。"},"ana_amex":{"level":"conditional","reason":"購入チャネルと決済手段をCSV/手入力の店名だけでは確定できないため。"},"ana_amex_gold":{"level":"conditional","reason":"購入チャネルと決済手段をCSV/手入力の店名だけでは確定できないため。"},"marriott_amex":{"level":"conditional","reason":"Marriottポイントの価値は交換先で変動するため、raw点数(2P)を単純に円換算せず約1%相当で保守計上"},"marriott_premium":{"level":"conditional","reason":"Marriottポイントの価値は交換先で変動するため約1%相当で保守計上"},"epos_platinum":{"level":"unsupported","reason":"指定店舗・年間利用額に依存し自動計算できない"},"paypay_gold":{"level":"unsupported","reason":"前月の決済回数・金額・本人確認状況をCSV/手入力だけでは判定できないため計上しない。"},"promise_visa":{"level":"conditional","reason":"スマホタッチ決済と対象店の判定がCSVだけでは確定できないため自動加算しない。家族ポイントで最大+5%も条件つき。"},"aeon_suica_card":{"level":"conditional","reason":"対象店判定がCSVだけでは確定できないため自動加算しない。感謝デー5%OFF・ありが10デー等も日付/条件つき。"},"kojima_bic_card":{"level":"conditional","reason":"コジマ/ビックの現金同率ポイント・WAON二重取りは店舗/決済条件つきのため自動加算しない。"},"majica_donpen_card":{"level":"conditional","reason":"ドンキ・majica加盟店の1.5%（年間利用ランクで最大4%）はmajica連携条件つきのため自動加算しない。"},"famima_card":{"level":"conditional","reason":"ファミマ3%/ファミペイ連携5%は条件つきのため自動加算しない。割引対象外品目も多い。"}};
+
+  // 還元率の根拠の強さを表示する。registry(creca-card-registry.json)の
+  // calculation_status が verified 以外のカードは、確定値と同じ顔で出さない。
+  function renderRateStatus(card){
+    var badge=document.getElementById("rateStatus"),reason=document.getElementById("rateReason"),
+        st=card&&RATE_STATUS[card.id];
+    if(!st){badge.classList.add("hide");reason.classList.add("hide");return;}
+    badge.textContent=st.level==="conditional"?"条件付きの還元率":"自動計算していない特典あり";
+    badge.classList.remove("hide");
+    reason.textContent=st.reason?"根拠: "+st.reason:"";
+    reason.classList.toggle("hide",!st.reason);
+  }
+
   var CARDS=[
     {id:"jcb_card_w",name:"JCB カード W",reward:"J-POINT",note:"通常1.0%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"39歳までに入会（40歳以降も無料）",source:"https://www.jcb.co.jp/promotion/ordercard/free_ws/index.html"},
     {id:"recruit_card",name:"リクルートカード",reward:"リクルートポイント",note:"通常1.2%・年会費無料",base:0.012,fee:0,rates:{},merchants:{},eligibility:"ポイント加算対象外の利用分を除く",source:"https://recruit-card.jp/basic-card/"},
@@ -465,10 +494,10 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     {id:"au_pay_card",name:"au PAY カード",reward:"Pontaポイント",note:"通常1.0%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"ポイント加算対象外の利用分を除く",source:"https://qa.kddi-fs.com/faq/show/357?category_id=56&site_domain=1"},
     {id:"rakuten_card",name:"楽天カード",reward:"楽天ポイント",note:"通常1.0%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"申込条件は公式で確認",source:"https://www.rakuten-card.co.jp/point/"},
     {id:"d_card",name:"dカード",reward:"dポイント",note:"通常1.0%・公共料金は0.5%",base:0.010,fee:0,rates:{"公共料金":0.005},merchants:{},eligibility:"年会費永年無料の一般カード",source:"https://dcard.docomo.ne.jp/st/dpoint_points/shopping/index.html"},
-    {id:"olive_flexible_pay_credit",name:"Oliveフレキシブルペイ（クレジットモード）",reward:"Vポイント",note:"通常0.5%・対象店でスマホタッチ8%（確認時）・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"クレジットモードで利用",source:"https://www.smbc-card.com/olive_flexible_pay/card/index.jsp"},
+    {id:"olive_flexible_pay_credit",name:"Oliveフレキシブルペイ（クレジットモード）",reward:"Vポイント",note:"通常0.5%・対象店8%（店名一致で自動計上）・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"クレジットモードで利用。対象店の8%は店名一致で自動計上（決済方法等の追加条件は利用時に公式で確認）",source:"https://www.smbc-card.com/olive_flexible_pay/card/index.jsp"},
     {id:"smbc_card_nl",name:"三井住友カード（NL）",reward:"Vポイント",note:"通常0.5%・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"満18歳以上（高校生を除く）。条件付き対象店還元は含めない",source:"https://www.smbc-card.com/nyukai/card/numberless.jsp"},
     {id:"mufg_card",name:"三菱UFJカード",reward:"グローバルポイント",note:"通常0.5%相当・年会費無料",base:0.001,fee:0,rates:{},merchants:{},eligibility:"18歳以上（高校生を除く）",source:"https://www.cr.mufg.jp/apply/card/mucard/index.html"},
-    {id:"aeon_card_waon",name:"イオンカード（WAON一体型）",reward:"WAON POINT",note:"通常0.5%・ミニストップは確認時1%・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"一般カード。ミニストップの1%はイオンマークのカード払いまたは電子マネーWAONを確認した場合のみ。AEON Payの店頭/モバイルオーダー金土日特典も条件選択時のみ",source:"https://www.aeon.co.jp/card/lineup/aeoncardwaon/"},
+    {id:"aeon_card_waon",name:"イオンカード（WAON一体型）",reward:"WAON POINT",note:"通常0.5%・ミニストップ1%（店名一致で自動計上）・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"一般カード。ミニストップは店名一致で確実な最低ライン1%を自動計上。AEON Payの店頭/モバイルオーダー金土日5%・10%は決済方法・曜日を判定できないため含めない",source:"https://www.aeon.co.jp/card/lineup/aeoncardwaon/"},
     {id:"epos_card",name:"エポスカード",reward:"エポスポイント",note:"通常0.5%・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"満18歳以上（高校生を除く）。ポイント対象外の利用分を除く",source:"https://www.eposcard.co.jp/smp/aflt/index2.html"},
     {id:"saison_card_digital",name:"セゾンカードデジタル",reward:"永久不滅ポイント",note:"通常0.5%相当・利用条件で無料",base:0.001,fee:0,inactivityFee:1650,inactivityFeeLabel:"入会月〜翌年同月に1回以上利用で無料",rates:{},merchants:{},eligibility:"入会月から翌年同月までに利用がない場合、カードサービス手数料¥1,650。1ポイント最大5円相当の交換方法で比較。対象外の利用分を除く",source:"https://www.saisoncard.co.jp/creditcard/lineup/082/?cd=14V1&mi=9090001&sd=001"},
     {id:"amazon_mastercard",name:"Amazon Mastercard",reward:"Amazonポイント",note:"通常1.0%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"Amazon.co.jp・コンビニの上乗せ、対象外の利用分を除く",source:"https://www.smbc-card.com/nyukai/affiliate/amazon/index.jsp"},
@@ -490,13 +519,13 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     {id:"smbc_gold_nl",name:"三井住友カード ゴールド（NL）",reward:"Vポイント",note:"通常0.5%・対象店タッチ最大7%（条件）・年100万で翌年以降永年無料",base:0.005,fee:5500,rates:{},merchants:{},eligibility:"年会費5,500円（税込）。年間100万円利用で翌年以降の年会費永年無料＋10,000ポイント。対象店の高還元は決済条件つき",source:"https://www.smbc-card.com/nyukai/card/gold-numberless.jsp"},
     {id:"dcard_gold",name:"dカード GOLD",reward:"dポイント",note:"通常1.0%・ドコモ料金10%（条件）・年会費11,000円",base:0.010,fee:11000,rates:{},merchants:{},eligibility:"年会費11,000円（税込）。ドコモ携帯・ドコモ光の10%還元は対象料金・条件あり",source:"https://dcard.docomo.ne.jp/st/dcard_gold/index.html"},
     {id:"vpoint_card_prime",name:"Vポイントカード Prime",reward:"Vポイント",note:"通常1.0%・日曜1.5%（条件）・年1回利用で無料",base:0.010,fee:0,inactivityFee:1375,inactivityFeeLabel:"前年に1回以上利用で翌年無料",rates:{},merchants:{},eligibility:"旧Tカード Prime。前年1回以上の利用で翌年無料（未利用時は年1,375円）。日曜1.5%は対象条件つき",source:"https://www.a-tm.co.jp/top/creditcard/creditcard-osusume/service-tcard-prime/"},
-    {id:"jal_suica_club_a_gold",name:"JALカードSuica CLUB-Aゴールドカード",reward:"JALマイル",note:"通常100円=1マイル・えきねっと/Suicaで高還元（条件）・年会費20,900円",base:0.010,fee:20900,rates:{},merchants:{},eligibility:"年会費20,900円（税込・ショッピングマイル・プレミアム込み）。通常100円=1マイル。JALカード特約店（JALグループ航空券購入等）でマイル2倍を反映。えきねっと発券・モバイルSuicaチャージ等のJRE POINT高還元（最大10%）は対象取引の条件つきで自動計算しない",source:"https://www.jreast.co.jp/card/first/jalsuicagold/"},
-    {id:"muji_card_visa",name:"MUJI Card（Visa）",reward:"永久不滅ポイント",note:"通常0.5%相当・無印良品は確認時2.5%相当・利用条件で無料",base:0.001,fee:0,inactivityFee:1650,inactivityFeeLabel:"入会後13か月に1円以上利用で無料",rates:{},merchants:{},eligibility:"Visaブランドを比較。入会月から翌年入会月末までに1円以上の利用がない場合はカードサービス手数料¥1,650。無印良品のMUJIポイント1%＋永久不滅ポイント3倍は決済方法を確認した場合だけ反映。MUJI passport Pay以外のスマホ決済は3倍の対象外",source:"https://www.muji.com/jp/mujicard/index.html"},
+    {id:"jal_suica_club_a_gold",name:"JALカードSuica CLUB-Aゴールドカード",reward:"JALマイル",note:"通常100円=1マイル・えきねっと10%/Suica1.5%（店名一致で自動計上）・年会費20,900円",base:0.010,fee:20900,rates:{},merchants:{},eligibility:"年会費20,900円（税込・ショッピングマイル・プレミアム込み）。通常100円=1マイル。JALカード特約店（JALグループ航空券購入等）でマイル2倍を反映。えきねっと10%・モバイルSuicaチャージ1.5%は店名一致で自動計上（対象取引かは利用時に公式で確認）",source:"https://www.jreast.co.jp/card/first/jalsuicagold/"},
+    {id:"muji_card_visa",name:"MUJI Card（Visa）",reward:"永久不滅ポイント",note:"通常0.5%相当・無印良品2.5%相当（店名一致で自動計上）・利用条件で無料",base:0.001,fee:0,inactivityFee:1650,inactivityFeeLabel:"入会後13か月に1円以上利用で無料",rates:{},merchants:{},eligibility:"Visaブランドを比較。入会月から翌年入会月末までに1円以上の利用がない場合はカードサービス手数料¥1,650。無印良品は店名一致で2.5%相当を自動計上。MUJI passport Pay以外のスマホ決済等の個別条件は利用時に公式で確認",source:"https://www.muji.com/jp/mujicard/index.html"},
     {id:"rakuten_bank_debit_jcb",name:"楽天銀行デビットカード（JCB）",cardType:"debit",reward:"楽天ポイント",note:"即時引落・通常1.0%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"楽天銀行口座が必要。JCB加盟店での通常利用分",source:"https://www.rakuten-bank.co.jp/card/debit/campaign/jcbdebit-ichiba-ad.html"},
     {id:"neobank_debit_mastercard",name:"住信SBIネット銀行デビットカード（Mastercard）",cardType:"debit",reward:"スマプロポイント",note:"即時引落・通常0.8%・公共料金等0.3%・年会費無料",base:0.008,fee:0,rates:{"公共料金":0.003},merchants:{},eligibility:"住信SBIネット銀行の対象支店口座が必要。税金・公共料金・鉄道等は0.3%",source:"https://www.netbk.co.jp/contents/lineup/debitcard/support-flow/point/"},
     {id:"sony_bank_wallet",name:"Sony Bank WALLET",cardType:"debit",reward:"現金キャッシュバック",note:"即時引落・通常0.5%・年会費無料",base:0.005,fee:0,rates:{},merchants:{},eligibility:"ソニー銀行口座が必要。Club Sのステージなし0.5%で比較（上位ステージは自動加算しない）",source:"https://sonybank.jp/products/sbw/08.html"},
     {id:"gmo_aozora_visa_debit",name:"GMOあおぞらネット銀行 Visaデビット",cardType:"debit",reward:"現金キャッシュバック",note:"即時引落・通常0.6%・公共料金等0.3%・年会費無料",base:0.006,fee:0,rates:{"公共料金":0.003},merchants:{},eligibility:"GMOあおぞらネット銀行口座が必要。カスタマーステージの最低率0.6%で比較。税金・公共料金等は0.3%",source:"https://gmo-aozora.com/priv/service/cashback.html"},
-    {id:"lawson_ponta_plus",name:"ローソンPontaプラス",reward:"Pontaポイント",note:"通常1.0%・ローソン最大6%（条件）・OK/松屋等5%・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"年会費無料（三菱UFJニコス発行・Pontaポイント）。一般加盟店1%（200円2P）。ローソンは常時1%・16-24時2%・毎月10日20日はローソンアプリでエントリー時3%（16-24時6%）。OK・松屋などの対象店は最大5%（対象決済・条件つき）。高還元は「ローソンPontaプラス条件」で明示選択した時だけ加算",source:"https://www.lawsonbank.jp/lp/lp_credit.html"},
+    {id:"lawson_ponta_plus",name:"ローソンPontaプラス",reward:"Pontaポイント",note:"通常1.0%・ローソン最大6%（条件）・対象店5%（店名一致で自動計上）・年会費無料",base:0.010,fee:0,rates:{},merchants:{},eligibility:"年会費無料（三菱UFJニコス発行・Pontaポイント）。一般加盟店1%（200円2P）。ローソンは常時1%・16-24時2%・毎月10日20日はローソンアプリでエントリー時3%（16-24時6%）。対象店は店名一致で5%を自動計上。時間帯・エントリーが必要な上位還元は含めない",source:"https://www.lawsonbank.jp/lp/lp_credit.html"},
     {id:"jre_card",name:"JRE CARD（Suica付）",reward:"JRE POINT",note:"通常0.5%・駅ビル3.5%・Suicaチャージ1.5%・年会費524円（初年度無料）",base:0.005,fee:524,rates:{},merchants:{},eligibility:"年会費524円（初年度無料）。アトレ・エキュート・シャポー・ビーンズ・ペリエ・nonowa等のJRE CARD優待店で3.5%。モバイルSuica/オートチャージで1.5%。JRE POINTはSuicaに1pt=1円",source:"https://www.jreast.co.jp/card/first/jrecard.html"},
     {id:"biccamera_suica",name:"ビックカメラSuicaカード",reward:"JRE POINT",note:"通常1.0%・ビックカメラ最大11.5%・Suicaチャージ1.5%・実質無料",base:0.010,fee:0,inactivityFee:524,inactivityFeeLabel:"前年に1回以上利用で翌年無料",rates:{},merchants:{},eligibility:"初年度無料・前年1回以上の利用で翌年無料（未利用時524円）。ビックカメラはカード決済で10%、Suica併用で最大11.5%。モバイルSuica/チャージで1.5%。一般加盟店1.0%（ビックポイント＋JRE POINT）",source:"https://kakaku.com/card/item.asp?id=040004"},
     {id:"tokyu_card",name:"TOKYU CARD ClubQ JMB PASMO",reward:"TOKYU POINT",note:"通常0.5%（Web明細登録で1.0%）・東急百貨店3%・PASMOオートチャージ1%・年会費1,100円（初年度無料）",base:0.005,fee:1100,rates:{},merchants:{},eligibility:"年会費1,100円（初年度無料）。東急グループ外の利用はWeb明細サービス登録で1.0%に上がる（未登録は0.5%・ツールは未登録想定で計上）。東急百貨店3%（食品/レストラン1.5%）、東急グループ・提携店最大10%。PASMOオートチャージ1%。TOKYU POINT",source:"https://www.topcard.co.jp/card/jmbpasmo.html"},
@@ -520,8 +549,8 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     {id:"au_pay_gold",name:"au PAY ゴールドカード",reward:"Pontaポイント",note:"通常1.0%・au/UQ料金最大10%・年会費11,000円",base:0.010,fee:11000,rates:{},merchants:{},eligibility:"年会費11,000円。通常1.0%。au携帯/UQ mobile/auひかり利用料金の最大10%をPonta還元。au PAYチャージ+決済で計1.5%",source:"https://www.kddi-fs.com/function/promotion/goldlp/"},
     {id:"dcard_platinum",name:"dカード PLATINUM",reward:"dポイント",note:"通常1.0%・ドコモ料金最大20%（初年度）・年会費29,700円",base:0.010,fee:29700,rates:{},merchants:{},eligibility:"年会費29,700円。通常1.0%。対象ドコモ利用料金は初年度20%、2年目以降は前月までの利用額に応じ10〜20%。ツールは下限10%で計上",source:"https://dcard.docomo.ne.jp/st/dcard_platinum/index.html"},
     {id:"jal_club_a_gold",name:"JALカード CLUB-Aゴールドカード",reward:"JALマイル",note:"100円=1マイル（1%）・JAL特約店2%・年会費17,600円",base:0.010,fee:17600,rates:{},merchants:{},eligibility:"年会費17,600円（ショッピングマイル・プレミアム自動付帯・100円1マイル）。JALカード特約店（イオン/ファミマ/JALグループ航空券購入等）で100円2マイル（2%）。搭乗ボーナス等は含めない",source:"https://www.jal.co.jp/jp/ja/jalcard/card/club_a_gold.html"},
-    {id:"jal_suica_regular",name:"JALカードSuica（普通）",reward:"JALマイル",note:"通常200円=1マイル（0.5%）・Suicaチャージ1.5%・えきねっと最大10%・年会費2,200円（初年度無料）",base:0.005,fee:2200,rates:{},merchants:{},eligibility:"年会費2,200円（初年度無料）。基本200円=1マイル。JALカード特約店（JALグループ航空券購入等）でマイル2倍を反映。ショッピングマイル・プレミアム(+年4,950)で100円1マイル。モバイルSuicaチャージ1.5%・えきねっと最大10%はJRE POINT（対象取引の条件つき）",source:"https://www.jal.co.jp/jp/ja/jalcard/card/suica.html"},
-    {id:"olive_gold",name:"Oliveフレキシブルペイ ゴールド",reward:"Vポイント",note:"通常0.5%・対象店タッチ7%・年100万で永年無料（年会費5,500円）",base:0.005,fee:5500,rates:{},merchants:{},eligibility:"年会費5,500円（年100万円以上利用で翌年以降永年無料＋1万P）。対象コンビニ・飲食店のスマホタッチ決済で最大7%（対象決済の確認時のみ）",source:"https://www.smbc.co.jp/kojin/olive-account/gold/"},
+    {id:"jal_suica_regular",name:"JALカードSuica（普通）",reward:"JALマイル",note:"通常200円=1マイル（0.5%）・Suicaチャージ1.5%・えきねっと5%（店名一致で自動計上）・年会費2,200円（初年度無料）",base:0.005,fee:2200,rates:{},merchants:{},eligibility:"年会費2,200円（初年度無料）。基本200円=1マイル。JALカード特約店（JALグループ航空券購入等）でマイル2倍を反映。ショッピングマイル・プレミアム(+年4,950)で100円1マイル。モバイルSuicaチャージ1.5%・えきねっと5%は店名一致で自動計上（普通カードのえきねっと率は安全側の5%を採用）",source:"https://www.jal.co.jp/jp/ja/jalcard/card/suica.html"},
+    {id:"olive_gold",name:"Oliveフレキシブルペイ ゴールド",reward:"Vポイント",note:"通常0.5%・対象店7%（店名一致で自動計上）・年100万で永年無料（年会費5,500円）",base:0.005,fee:5500,rates:{},merchants:{},eligibility:"年会費5,500円（年100万円以上利用で翌年以降永年無料＋1万P）。対象コンビニ・飲食店の7%は店名一致で自動計上（決済方法等の追加条件は利用時に公式で確認）",source:"https://www.smbc.co.jp/kojin/olive-account/gold/"},
     {id:"ana_jcb_wide_gold",name:"ANA JCB ワイドゴールドカード",reward:"ANAマイル",note:"通常1.0%・マイル移行無料・年会費15,400円",base:0.010,fee:15400,rates:{},merchants:{},eligibility:"年会費15,400円。1,000円=10マイル（1.0%）でマイル移行手数料無料。毎年継続2,000マイル。ANAカードマイルプラス（ANA/ANAグループ航空券購入で100円=1マイル追加）を反映。搭乗ボーナスは含めない",source:"https://www.ana.co.jp/ja/jp/amc/anacard/ichiran/"},
     {id:"amex_green",name:"アメリカン・エキスプレス・グリーン・カード",reward:"メンバーシップリワード",note:"通常1.0%相当・月会費1,100円（年13,200円）",base:0.010,fee:13200,rates:{},merchants:{},eligibility:"月会費1,100円（年13,200円）。100円=1ポイント。メンバーシップ・リワードは交換先で価値変動（対象パートナーへの移行で約1%相当）",source:"https://www.americanexpress.com/ja-jp/credit-cards/green-card/"},
     {id:"amex_gold_preferred",name:"アメックス・ゴールド・プリファード・カード",reward:"メンバーシップリワード",note:"通常1.0%相当・年会費39,600円",base:0.010,fee:39600,rates:{},merchants:{},eligibility:"年会費39,600円。100円=1ポイント。メンバーシップ・リワード・プラス自動付帯。交換先で価値変動",source:"https://www.americanexpress.com/ja-jp/credit-cards/gold-preferred-card/"},
@@ -548,7 +577,7 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
   ];
 
   function isMujiMerchant(name){var n=(name||"").toString().toLowerCase();return n.indexOf("無印良品")!==-1||n.indexOf("muji")!==-1;}
-  // Olive対象のコンビニ・飲食店（公式・2026-02-01〜。ファミマ等は対象外）。スマホのタッチ決済確認時のみ8%。
+  // Olive対象のコンビニ・飲食店（公式・2026-02-01〜。ファミマ等は対象外）。v23方針では店名一致で8%を自動計上する。
   function isOliveMerchant(name){var n=(name||"").toString().toLowerCase();return ["セブン","ローソン","ミニストップ","セイコーマート","ポプラ","マクドナルド","モスバーガー","ケンタッキー","kfc","吉野家","サイゼ","ガスト","バーミヤン","ジョナサン","夢庵","しゃぶ葉","すき家","はま寿司","かっぱ寿司","ココス","ドトール","エクセルシオール","から好し","グラッチェ","とんから亭","ゆめあん","藍屋","魚屋路","ステーキガスト","八郎そば","桃菜"].some(function(k){return n.indexOf(k.toLowerCase())!==-1;});}
   // 三菱UFJカードの対象店（公式・7%＝基本0.5%+スペシャル6.5%、スペシャル上限5万円/月）。コンビニ・飲食・スーパー。
   function isMufgMerchant(name){var n=(name||"").toString().toLowerCase();return ["セブン","ローソン","ミニストップ","松屋","松のや","マイカリー","ピザハット","くら寿司","スシロー","ゼッテリア","ロッテリア","オーケー","オオゼキ","東急ストア","東武ストア","三和","アオキスーパー","肉のハナマサ","ハナマサ","ジャパンミート","ヤマナカ","近商","ドミー","サンリブ","ハーベス","スーパー魚長","フィール","フードストア","フードワン","コクミン"].some(function(k){return n.indexOf(k.toLowerCase())!==-1;});}
@@ -784,8 +813,15 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
   var lastRows=null, lastFromCsv=true, mode="single", lastAnalysis=null;
 
   function subsets(arr,maxK){
-    var res=[],n=arr.length;
-    for(var m=1;m<(1<<n);m++){var s=[],cnt=0;for(var i=0;i<n;i++)if(m&(1<<i)){s.push(arr[i]);cnt++;}if(cnt<=maxK&&cnt<=n)res.push(s);}
+    // カード数が32枚を超えてもbitwise shiftの桁あふれを起こさず、
+    // 上限枚数までの組合せだけを列挙する（現行86枚・上限3枚で約10万通り）。
+    var res=[],limit=Math.min(maxK,arr.length);
+    function visit(start,chosen){
+      if(chosen.length)res.push(chosen.slice());
+      if(chosen.length===limit)return;
+      for(var i=start;i<arr.length;i++){chosen.push(arr[i]);visit(i+1,chosen);chosen.pop();}
+    }
+    visit(0,[]);
     return res;
   }
 
@@ -946,6 +982,7 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
       document.getElementById("modalCardSub").textContent="実質年間還元 "+yen(a.best.annualNet)+"（"+bc0.reward+"）";
       document.getElementById("modalCardFace").innerHTML='<span class="cf-chip"></span><span class="cf-name">'+esc(bc0.name)+'</span>';
       document.getElementById("modalApply").href=bc0.source||"#";
+      renderRateStatus(bc0);
     }
     renderAffiliateOffer(bc0);
     var res=document.getElementById("results");
