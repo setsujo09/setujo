@@ -263,6 +263,9 @@
       <span class="opt">支払い方法
         <select id="paymentType"><option value="all">すべて</option><option value="credit">クレジットカードのみ</option><option value="debit">デビットカードのみ（即時引落）</option></select>
       </span>
+      <span class="opt">カード種別
+        <select id="audienceType"><option value="personal" selected>個人向け</option><option value="business">事業用</option><option value="all">すべて</option></select>
+      </span>
       <label class="chk"><input type="checkbox" id="freeChk">利用条件を満たせば年会費無料のカードだけ</label>
       <label class="chk"><input type="checkbox" id="condChk">利用条件を確認済みのカードも候補に含める</label>
       <label class="chk"><input type="checkbox" id="studentChk">学生向けカードも候補に含める</label>
@@ -273,7 +276,7 @@
 
   <div class="results" id="results">
 
-    <div class="samplebanner">公式情報を2026-07-23に確認した<strong>通常還元・年会費の比較</strong>です。クレジットカードと即時引落のデビットカードを切替できます。店名が確認済みの特約店ルールに一致した分は自動で上乗せを反映しますが、決済方法・時間帯・事前エントリーなどさらに条件が必要な上位の還元（無印良品の他スマホ決済、ミニストップのAEON Pay 5%・10%、ローソンの時間帯・エントリー特典など）は店名だけでは判定できないため含めません。マイルは選択した円換算価値で比較し、未利用年のカードサービス手数料など確認済みの費用条件も表示します。キャンペーン、搭乗・航空券ボーナス、対象外取引はCSVだけで確定できないため、自動加算していません。</div>
+    <div class="samplebanner">公式情報を2026-08-02に確認した<strong>通常還元・年会費の比較</strong>です。クレジットカードと即時引落のデビットカードを切替できます。店名が確認済みの特約店ルールに一致した分は自動で上乗せを反映しますが、決済方法・時間帯・事前エントリーなどさらに条件が必要な上位の還元（無印良品の他スマホ決済、ミニストップのAEON Pay 5%・10%、ローソンの時間帯・エントリー特典など）は店名だけでは判定できないため含めません。マイルは選択した円換算価値で比較し、未利用年のカードサービス手数料など確認済みの費用条件も表示します。キャンペーン、搭乗・航空券ボーナス、対象外取引はCSVだけで確定できないため、自動加算していません。</div>
 
     <section class="card hero">
       <p class="lbl" id="heroLbl">最適な選択</p>
@@ -332,7 +335,7 @@
           <li><strong>期間限定キャンペーンは対象外。</strong> 楽天市場の5と0の日・お買い物マラソン、各カードの入会/継続キャンペーンなどは、エントリー・対象外・上限・開催期間をこの診断だけで判定できないため計算に含めません。下記の公式情報と利用時点の規約を確認してください。</li>
           <li><strong>ガソリンの円/L引きは参考価格による概算。</strong> 出光/シェルSSの2円/L引き（apollostation card）は、詳細設定の「参考：レギュラー1Lの価格」（初期値¥169・全国平均）で割った概算%として表示します。実際の給油時単価によって実際の割引率は変わります。コスモ石油の「会員価格」は具体的な円/L額が公表されていないため計算していません。</li>
         </ul>
-        <p><strong>v22で参照した公式情報（2026-07-23確認・v22追加5枚とv24のJAL/ANA航空券購入マイルは2026-07-24確認）</strong></p>
+        <p><strong>v25で参照した公式情報（2026-08-02確認・追加カード4枚を含む）</strong></p>
         <ul class="source-links">
           <li><a href="https://www.jcb.co.jp/promotion/ordercard/free_ws/index.html" target="_blank" rel="noopener noreferrer">JCB カード W</a>・<a href="https://recruit-card.jp/basic-card/" target="_blank" rel="noopener noreferrer">リクルートカード</a>・<a href="https://www.rakuten-card.co.jp/point/" target="_blank" rel="noopener noreferrer">楽天カード</a>・<a href="https://dcard.docomo.ne.jp/st/dpoint_points/shopping/index.html" target="_blank" rel="noopener noreferrer">dカード</a></li>
           <li><a href="https://www.orico.co.jp/creditcard/list/thepoint/" target="_blank" rel="noopener noreferrer">Orico Card THE POINT</a>・<a href="https://qa.kddi-fs.com/faq/show/357?category_id=56&amp;site_domain=1" target="_blank" rel="noopener noreferrer">au PAY カード</a>・<a href="https://www.smbc-card.com/nyukai/card/numberless.jsp" target="_blank" rel="noopener noreferrer">三井住友カード（NL）</a>・<a href="https://www.eposcard.co.jp/smp/aflt/index2.html" target="_blank" rel="noopener noreferrer">エポスカード</a></li>
@@ -481,6 +484,15 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
 
   // 還元率の根拠の強さを表示する。registry(creca-card-registry.json)の
   // calculation_status が verified 以外のカードは、確定値と同じ顔で出さない。
+  var RATE_STATUS_PATCH={
+    "smbc_business_owners":{"level":"conditional","reason":"申込資格と組み合わせ特典は利用者属性・対象カード・対象店の確認が必要。"},
+    "smbc_platinum_preferred":{"level":"unsupported","reason":"対象期間、上限、対象外取引が特典ごとに異なるため自動計算しない。"},
+    "apollostation_the_platinum":{"level":"conditional","reason":"燃料値引きは決済店、油種、会員条件に依存し、通常還元率へ合算しない。"},
+    "saison_platinum_business":{"level":"unsupported","reason":"別途登録・費用、対象期間、マイル移行条件があるため通常還元に自動加算しない。"}
+  };
+  Object.keys(RATE_STATUS_PATCH).forEach(function(k){RATE_STATUS[k]=RATE_STATUS_PATCH[k];});
+  delete RATE_STATUS.view_card_suica;
+
   function renderRateStatus(card){
     var badge=document.getElementById("rateStatus"),reason=document.getElementById("rateReason"),
         st=card&&RATE_STATUS[card.id];
@@ -577,7 +589,11 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     {id:"aeon_suica_card",name:"イオンSuicaカード",reward:"WAON POINT",note:"通常0.5%・イオン系1%・Suica一体・年会費無料（2026-07-24公式確認）",base:0.005,fee:0,rates:{},merchants:{},eligibility:"イオン発行・年会費無料。イオングループ2倍(1%)・感謝デー5%OFF・ありが10デー等は対象店/日付条件つき。WAON POINTをSuicaチャージ可",source:"https://kakaku.com/card/item.asp?id=019003"},
     {id:"kojima_bic_card",name:"コジマ×ビックカメラカード",reward:"WAON POINT",note:"通常0.5%・コジマ/ビックで現金同率・年会費無料（2026-07-24公式確認）",base:0.005,fee:0,rates:{},merchants:{},eligibility:"イオン発行・年会費無料（コジマポイント・WAON一体）。コジマ/ビック/ソフマップの現金同率ポイント・WAON二重取りは店舗/決済条件つき",source:"https://www.aeon.co.jp/card/lp/kojima/"},
     {id:"majica_donpen_card",name:"majica donpen card",reward:"majicaポイント",note:"通常0.5%・ドンキ/majicaで1.5%（ランク最大4%・条件）・年会費無料（2026-07-24公式確認）",base:0.005,fee:0,rates:{},merchants:{},eligibility:"UCS発行・年会費無料。ドン・キホーテ/majica加盟店1.5%(majica連携)・年間利用ランクで最大4%は条件つき",source:"https://www.ucscard.co.jp/lineup/donpen/"},
-    {id:"famima_card",name:"ファミマカード",reward:"現金値引き",note:"JCB加盟店で請求時1%割引・ファミマ最大5%（ファミペイ連携・条件）・年会費無料（2026-07-24公式確認）",base:0.010,fee:0,rates:{},merchants:{},eligibility:"ポケットカード発行・年会費無料。ポイントでなく請求時割引。ファミマ3%/ファミペイ連携5%・電子マネーチャージや金券は対象外",source:"https://fcard.pocketcard.co.jp/service/discount.html"}
+    {id:"famima_card",name:"ファミマカード",reward:"現金値引き",note:"JCB加盟店で請求時1%割引・ファミマ最大5%（ファミペイ連携・条件）・年会費無料（2026-07-24公式確認）",base:0.010,fee:0,rates:{},merchants:{},eligibility:"ポケットカード発行・年会費無料。ポイントでなく請求時割引。ファミマ3%/ファミペイ連携5%・電子マネーチャージや金券は対象外",source:"https://fcard.pocketcard.co.jp/service/discount.html"},
+    {id:"smbc_business_owners",name:"三井住友カード ビジネスオーナーズ",reward:"Vポイント",note:"通常0.5%・年会費無料・法人代表者/個人事業主向け",base:0.005,fee:0,rates:{},merchants:{},audience:"business",eligibility:"法人代表者・個人事業主向け。年会費無料。対象の三井住友カードとの組み合わせ特典や対象店の上乗せは条件確認が必要",source:"https://www.smbc-card.com/hojin/lineup/biz_owners_index.jsp?dk=hp_151_0022236"},
+    {id:"smbc_platinum_preferred",name:"三井住友カード プラチナプリファード",reward:"Vポイント",note:"通常1.0%・年会費33,000円・継続/特約店ボーナスは条件付き",base:0.010,fee:33000,rates:{},merchants:{},eligibility:"満20歳以上で安定継続収入がある方。年会費33,000円。継続ボーナス・特約店・海外利用・SBI証券積立などは条件と対象外取引を自動計算しない",source:"https://www.smbc-card.com/nyukai/card/platinum-preferred.jsp"},
+    {id:"apollostation_the_platinum",name:"apollostation THE PLATINUM セゾン・アメリカン・エキスプレス・カード",reward:"プラスポイント",note:"通常1.2%・年会費22,000円・燃料値引きと年会費優遇は条件付き",base:0.012,fee:22000,rates:{},merchants:{},eligibility:"一般加盟店は1,000円につき12プラスポイント。apollostationの燃料値引き、年間300万円利用で翌年度無料、家族カードは条件確認が必要なため自動計算しない",source:"https://www.idemitsucard.com/card/theplatinum/"},
+    {id:"saison_platinum_business",name:"セゾンプラチナ・ビジネス・アメリカン・エキスプレス・カード",reward:"永久不滅ポイント",note:"通常0.5%相当・初年度無料、翌年度33,000円・事業者向け",base:0.001,fee:33000,rates:{},merchants:{},audience:"business",eligibility:"法人代表者・個人事業主・フリーランス向け。初年度年会費無料、翌年度33,000円。海外利用2倍やSAISON MILE CLUBは別条件・別費用のため自動計算しない",source:"https://www.saisoncard.co.jp/amex/platinumbusiness/"}
   ];
 
   function isMujiMerchant(name){var n=(name||"").toString().toLowerCase();return n.indexOf("無印良品")!==-1||n.indexOf("muji")!==-1;}
@@ -727,6 +743,7 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     return "年会費無料";
   }
   function matchesPaymentType(card,paymentType){return paymentType!=="debit"?(paymentType!=="credit"||card.cardType!=="debit"):card.cardType==="debit";}
+  function matchesAudience(card,audience){return audience==="all"||(card.audience||"personal")===(audience||"personal");}
 
   function displayRate(card,cat,condOn){
     var r=card.rates[cat];
@@ -818,7 +835,7 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
 
   function subsets(arr,maxK){
     // カード数が32枚を超えてもbitwise shiftの桁あふれを起こさず、
-    // 上限枚数までの組合せだけを列挙する（現行86枚・上限3枚で約10万通り）。
+    // 上限枚数までの組合せだけを列挙する（現行90枚・上限3枚で約12万通り）。
     var res=[],limit=Math.min(maxK,arr.length);
     function visit(start,chosen){
       if(chosen.length)res.push(chosen.slice());
@@ -829,30 +846,63 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     return res;
   }
 
+  // 名目率だけでなく、カード別の上限を考慮して明細割当を局所改善する。
+  // 大量明細では既存の貪欲割当へ戻し、画面応答性を守る（上限24明細まで改善）。
+  function allocateRowsToCards(set,rows,condOn){
+    var buckets={};set.forEach(function(c){buckets[c.name]=[];});
+    rows.forEach(function(row){
+      var bc=set[0],br=-Infinity;
+      set.forEach(function(card){var rr=valueRate(card,row,condOn);if(rr>br){br=rr;bc=card;}});
+      buckets[bc.name].push(row);
+    });
+    function score(next){
+      var val=0,used=[];
+      set.forEach(function(card){var list=next[card.name]||[];if(list.length){val+=cardValue(card,list,condOn)*12-annualFee(card,true);used.push(card);}});
+      return {val:val,used:used,buckets:next};
+    }
+    if(set.length<2||rows.length>24)return score(buckets);
+    var rounds=0,maxRounds=Math.min(48,rows.length*set.length*2);
+    while(rounds<maxRounds){
+      var improved=false;
+      for(var i=0;i<rows.length;i++){
+        var row=rows[i],source=null,index=-1;
+        for(var si=0;si<set.length;si++){
+          var sourceRows=buckets[set[si].name]||[],found=sourceRows.indexOf(row);
+          if(found!==-1){source=set[si];index=found;break;}
+        }
+        if(!source)continue;
+        var bestValue=score(buckets).val,bestTarget=null;
+        set.forEach(function(target){
+          if(target===source)return;
+          var candidate={};set.forEach(function(card){candidate[card.name]=(buckets[card.name]||[]).slice();});
+          candidate[source.name].splice(index,1);candidate[target.name].push(row);
+          var candidateValue=score(candidate).val;
+          if(candidateValue>bestValue+1e-9){bestValue=candidateValue;bestTarget=target;}
+        });
+        if(bestTarget){buckets[source.name].splice(index,1);buckets[bestTarget.name].push(row);improved=true;}
+      }
+      if(!improved)break;
+      rounds++;
+    }
+    return score(buckets);
+  }
+
   function analyze(rows,opts){
-    var condOn=opts.condOn,maxK=opts.maxK,pref=opts.pref,freeOnly=opts.freeOnly,studentEligible=opts.studentEligible,paymentType=opts.paymentType||"all";
+    var condOn=opts.condOn,maxK=opts.maxK,pref=opts.pref,freeOnly=opts.freeOnly,studentEligible=opts.studentEligible,paymentType=opts.paymentType||"all",audience=opts.audience||"personal";
     var byCat={};CATS.forEach(function(c){byCat[c]=0;});
     var total=0;rows.forEach(function(r){byCat[r.category]+=r.amount;total+=r.amount;});
     var activeCats=CATS.filter(function(c){return byCat[c]>0;});
     var baseCard=CARDS[0];
     var baseAnnual=total*baseCard.base*12;
 
-    var cands=CARDS.filter(function(c){return matchesPaymentType(c,paymentType)&&(!pref||c.reward===pref)&&(!freeOnly||annualFee(c,true)===0)&&(!c.studentOnly||studentEligible)&&(!c.requiresConfirmation||condOn);});
+    var cands=CARDS.filter(function(c){return matchesPaymentType(c,paymentType)&&matchesAudience(c,audience)&&(!pref||c.reward===pref)&&(!freeOnly||annualFee(c,true)===0)&&(!c.studentOnly||studentEligible)&&(!c.requiresConfirmation||condOn);});
     if(!cands.length)cands=[baseCard];
 
     var cardResults=cands.map(function(card){return {card:card,annualNet:cardValue(card,rows,condOn)*12-annualFee(card,true)};});
 
-    // multi: 明細ごとに名目還元率が最も高いカードへ割り当て、年額は上限込みで計算する。
+    // multi: 上限を考慮した局所改善付きで明細をカードへ割り当てる。
     function setValue(set){
-      var buckets={};set.forEach(function(c){buckets[c.name]=[];});
-      rows.forEach(function(row){
-        var bc=set[0],br=-Infinity;
-        set.forEach(function(card){var rr=valueRate(card,row,condOn);if(rr>br){br=rr;bc=card;}});
-        buckets[bc.name].push(row);
-      });
-      var val=0,used=[];
-      set.forEach(function(card){if(buckets[card.name].length){val+=cardValue(card,buckets[card.name],condOn)*12-annualFee(card,true);used.push(card);}});
-      return {val:val,used:used,buckets:buckets};
+      return allocateRowsToCards(set,rows,condOn);
     }
 
     var best;
@@ -912,9 +962,10 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
     var studentEligible=document.getElementById("studentChk").checked;
     var pref=document.getElementById("prefReward").value;
     var paymentType=document.getElementById("paymentType").value;
-    var a=analyze(lastRows,{condOn:condOn,maxK:maxK,pref:pref,freeOnly:freeOnly,studentEligible:studentEligible,paymentType:paymentType});lastAnalysis=a;
+    var audience=document.getElementById("audienceType").value;
+    var a=analyze(lastRows,{condOn:condOn,maxK:maxK,pref:pref,freeOnly:freeOnly,studentEligible:studentEligible,paymentType:paymentType,audience:audience});lastAnalysis=a;
 
-    var tail=(paymentType==="debit"?"・デビットのみ":paymentType==="credit"?"・クレジットのみ":"")+(freeOnly?"・利用条件込みで年会費無料":"")+(studentEligible?"・学生向け可":"")+(pref?"・"+pref:"");
+    var tail=(paymentType==="debit"?"・デビットのみ":paymentType==="credit"?"・クレジットのみ":"")+(audience==="business"?"・事業用":audience==="personal"?"・個人向け":"・個人/事業用")+(freeOnly?"・利用条件込みで年会費無料":"")+(studentEligible?"・学生向け可":"")+(pref?"・"+pref:"");
     if(mode==="single"){document.getElementById("heroLbl").textContent="この支出での最適な1枚"+tail;document.getElementById("heroHeadline").textContent=a.best.cards[0].name;}
     else if(a.best.cards.length===1){document.getElementById("heroLbl").textContent="複数枚OKでも、1枚に集約が最適（複数化の上乗せなし）"+tail;document.getElementById("heroHeadline").textContent=a.best.cards[0].name;}
     else{document.getElementById("heroLbl").textContent="最適な組み合わせ（"+a.best.cards.length+"枚で使い分け）"+tail;document.getElementById("heroHeadline").textContent="店舗・カテゴリごとに最適カードへ振り分け";}
@@ -1115,6 +1166,7 @@ brandsafe_js_async('//ad-verification.a8.net/ad', '_site=1734&_article=658&_link
   document.getElementById("condChk").addEventListener("change",function(){if(lastRows)render();});
   document.getElementById("freeChk").addEventListener("change",function(){if(lastRows)render();});
   document.getElementById("paymentType").addEventListener("change",function(){if(lastRows)render();});
+  document.getElementById("audienceType").addEventListener("change",function(){if(lastRows)render();});
   document.getElementById("studentChk").addEventListener("change",function(){if(lastRows)render();});
   document.getElementById("prefReward").addEventListener("change",function(){if(lastRows)render();});
   document.getElementById("mileValue").addEventListener("change",function(){if(lastRows)render();});
